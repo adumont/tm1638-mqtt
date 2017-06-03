@@ -22,10 +22,43 @@ void delivered(void * context, MQTTClient_deliveryToken dt) {
    deliveredtoken = dt;
 }
 
+void format_dots(char* m, char** s, int* d){
+  *s=malloc( strlen(m) * sizeof(char)  );
+
+  char c;
+  int dots=0;
+  int j=0;
+  char last_c=' ';
+
+  for (int i=0; m[i]!=0 && j<9;i++){
+    c=m[i];
+    if(c=='.' || c==',') {
+      if(j==0 || last_c == '.' ) { // first char is a dot or we repeat a dot
+        c=' ';
+        (*s)[j++]=c;
+      }
+      dots |= 1<<(j-1) ;
+      last_c='.';
+    } else {
+        (*s)[j++]=c;
+        last_c=c;
+    }
+  }
+  (*s)[j<8?j:8]=0;
+
+  dots &= 255; // limit to 8 bits dots
+
+  *d=dots;
+}
+
 int msgarrvd(void * context, char * topicName, int topicLen, MQTTClient_message * message) {
    uint8_t i;
    char * payloadptr;
-   char msg[10];
+   char *msg;
+   char *s;
+   int dots;
+
+   msg=malloc( (message->payloadlen +1) * sizeof(char)  );
 
    printf("topic: %s, payload:", topicName);
 
@@ -41,7 +74,8 @@ int msgarrvd(void * context, char * topicName, int topicLen, MQTTClient_message 
       int leds = atoi(msg);
       tm1638_set_8leds(t, leds, 0);
    } else if (strcmp(topicName, TOPIC_TEXT) == 0) {
-      tm1638_set_7seg_text(t, msg, 0x00); //dots=0x00
+      format_dots( msg, &s, &dots);
+      tm1638_set_7seg_text(t, s, dots); //dots=0x00
    }
 
    MQTTClient_freeMessage( & message);
