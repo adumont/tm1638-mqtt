@@ -104,7 +104,7 @@ int main(int argc, char * argv[]) {
    MQTTClient client;
    MQTTClient_connectOptions conn_opts = MQTTClient_connectOptions_initializer;
    int rc;
-   int ch;
+   //int ch;
 
    MQTTClient_create( & client, ADDRESS, CLIENTID,
       MQTTCLIENT_PERSISTENCE_NONE, NULL);
@@ -119,14 +119,12 @@ int main(int argc, char * argv[]) {
    }
 
    //printf("Subscribing to topic %s\nfor client %s using QoS%d\n\n"
-   printf("Press Q<Enter> to quit\n");
-
    MQTTClient_subscribe(client, TOPIC_LEDS, QOS);
    MQTTClient_subscribe(client, TOPIC_TEXT, QOS);
 
    do {
-      ch = getchar();
-   } while (ch != 'Q' && ch != 'q');
+      delay(10);
+   } while ( true );
 
    MQTTClient_disconnect(client, 10000);
    MQTTClient_destroy( & client);
