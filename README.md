@@ -2,7 +2,7 @@
 
 This is an MQTT bridge for TM1638 that runs on Raspberry Pi.
 
-![TM1638 Led&Key](assets/tm1638.jpg?raw=true | width=400)
+![TM1638 Led&Key](assets/tm1638.jpg?raw=true)
 ![Raspberry Pi](assets/raspberrypi.png?raw=true)
 ![MQTT](assets/mqtt.png?raw=true)
 
@@ -77,7 +77,7 @@ In my case this is how I have connected the TM1638 to the Pi as shown below:
 |CLK|GPIO27|
 |DIO|GPIO22|
 
-![TM1638 and RPi](assets/TM1638-RPi3_bb.png?raw=true | width=50%)
+![TM1638 and RPi](assets/TM1638-RPi3_bb.png?raw=true)
 
 You can locate the PIN numbers in the code by looking searching for `tm1638_alloc`. The line  reads:
 
